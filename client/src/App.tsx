@@ -1,34 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useDispatch, useSelector } from 'react-redux';
 import './App.css'
+import { searchSkills } from './actions';
+import { ResultsList } from './ResultsList';
+import type { TState } from './reducer';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const dispatch = useDispatch();
+
+  const hasSearched = useSelector((state: TState) => state.hasSearched);
+  const skills = useSelector((state: TState) => state.skills);
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    const value = event.target.elements.skill.value.trim();
+    if (value.length > 0) {
+      dispatch(searchSkills(value));
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Diana</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="skill">
+          Search Skills:
+          <input type="text" id="skill" placeholder="Type something to search..." />
+        </label>
+        <button type="submit">Search</button>
+      </form>
+      {!hasSearched && <p>Type something to search...</p>}
+      {hasSearched && skills.length === 0 && <p>No matching skills found.</p>}
+      {hasSearched && skills.length > 0 && <ResultsList />}
+    </div>
   )
 }
 
