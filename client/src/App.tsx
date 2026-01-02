@@ -23,7 +23,7 @@ function App() {
       <form onSubmit={handleSubmit}>
         <label htmlFor="skill">
           Search Skills:
-          <input type="text" id="skill" placeholder="Type something to search..." />
+          <input type="text" id="skill" />
         </label>
         <button type="submit">Search</button>
       </form>
